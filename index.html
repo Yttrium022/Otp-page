@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>OTP Verification</h1>
+        <p>Enter the OTP you received to <span id="phoneNumber"></span></p>
+        <div class="otp-input">
+            <input type="number" min="0" max="9" required>
+            <input type="number" min="0" max="9" required>
+            <input type="number" min="0" max="9" required>
+            <input type="number" min="0" max="9" required>
+            <input type="number" min="0" max="9" required>
+            <input type="number" min="0" max="9" required>
+        </div>
+        <button onclick="verifyOTP()">Verify</button>
+        <div class="resend-text">
+            Didn't receive the code? 
+            <span class="resend-link" onclick="resendOTP()">Resend Code</span>
+            <span id="timer"></span>
+        </div>
+    </div>
+
+    <script>
+        // URL থেকে ফোন নাম্বারটি রিড করা
+        const queryParams = new URLSearchParams(window.location.search);
+        const phoneNumber = queryParams.get('phone');
+
+        // ফোন নাম্বারটি HTML এ দেখানো
+        document.getElementById('phoneNumber').textContent = phoneNumber ? phoneNumber : 'N/A';
+
+        // টাইমার কাউন্টডাউন লজিক
+        let countdownTime = 300; // 5 মিনিট (300 সেকেন্ড)
+        const timerElement = document.getElementById('timer');
+        
+        function updateTimer() {
+            const minutes = Math.floor(countdownTime / 60);
+            const seconds = countdownTime % 60;
+            timerElement.textContent = `(${minutes}:${seconds < 10 ? '0' : ''}${seconds})`;
+            
+            if (countdownTime <= 0) {
+                timerElement.textContent = 'You can resend the code now.';
+                clearInterval(timerInterval); // Stop the countdown
+            } else {
+                countdownTime--;
+            }
+        }
+
+        // Update the timer every second
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        function verifyOTP() {
+            // OTP verification logic here
+            alert('OTP Verified');
+        }
+
+        function resendOTP() {
+            // OTP resend logic here
+            alert('OTP Resent');
+            countdownTime = 300; // Reset the countdown
+            updateTimer(); // Update the timer display
+        }
+    </script>
+</body>
+</html>
